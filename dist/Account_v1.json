@@ -1,0 +1,1007 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "0.0.1",
+        "title": "Zuora Account Example REST API",
+        "description": "An account is a customer account that collects all of the critical information about the customer, such as contact information, payment terms, and payment methods.",
+        "contact": {
+            "email": "liang.fang@zuora.com"
+        }
+    },
+    "host": "developer.zuora.com",
+    "schemes": [
+        "https"
+    ],
+    "basePath": "/v1",
+    "produces": [
+        "application/json"
+    ],
+    "tags": [
+        {
+            "name": "account",
+            "description": "The Account object represents an individual customer account. Each Account object includes everything Zuora needs to bill and collect, such as addresses, payment methods, and payment terms."
+        }
+    ],
+    "paths": {
+        "/accounts": {
+            "post": {
+                "summary": "Create an account.",
+                "operationId": "POSTAccount",
+                "description": "Track all subscriptions, usage, and transactions for each customer account. Each account is a source of a recurring invoice stream. Every subscription must be associated with an account. At least one active account must exist before any subscriptions can be created.\n",
+                "tags": [
+                    "account"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "zuora-version",
+                        "in": "header",
+                        "required": false,
+                        "type": "string",
+                        "description": "The minor version of the Zuora REST API."
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "required": false,
+                        "type": "string",
+                        "description": "If you enter application/json, only JSON is returned."
+                    },
+                    {
+                        "name": "entityId",
+                        "in": "header",
+                        "type": "string",
+                        "description": "Id of the entity that the entity user wants to access."
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": null,
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/POSTAccount"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The server has processed the request.",
+                        "schema": {
+                            "$ref": "#/definitions/POSTAccountResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "success": true,
+                                "accountId": "402892c74c9193cd014c96bbe7c101f9",
+                                "accountNumber": "A00000004",
+                                "paymentMethodId": "402892c74c9193cd014c96bbe7d901fd"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/accounts/{account-Key}": {
+            "get": {
+                "summary": "This REST API reference describes how to retrieve basic information about a customer account.",
+                "operationId": "getAccountByKey",
+                "description": "This REST call is a quick retrieval that doesn't include the account's subscriptions, invoices, payments, or usage details. Use the Get account summary to get more detailed information about an account.\n",
+                "tags": [
+                    "account"
+                ],
+                "parameters": [
+                    {
+                        "name": "account-key",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Account number or account ID"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The server has processed the request.",
+                        "schema": {
+                            "$ref": "#/definitions/GETAccount"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid order key."
+                    },
+                    "404": {
+                        "description": "Order not found."
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/account/{account-key}/Summary": {
+            "get": {
+                "summary": "Summary of the account's subscriptions, invoices, payments, and usage for the last six months.",
+                "operationId": "getAccountSummaryByAccountKey",
+                "description": "The response includes everything retrieved with the Get basic account information.\n",
+                "tags": [
+                    "account"
+                ],
+                "parameters": [
+                    {
+                        "name": "account-key",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Account number or account ID"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The server has processed the request.",
+                        "schema": {
+                            "$ref": "#/definitions/GETAccountSummary"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid account key."
+                    },
+                    "404": {
+                        "description": "Account not found."
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/accounts/{account-key}": {
+            "put": {
+                "summary": "Update a customer account by specifying the account-key.",
+                "operationId": "updateAccount",
+                "description": "Direct modify a account.\n",
+                "tags": [
+                    "account"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "account-key",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Account number or account ID"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "charge information to be updated.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/PATCHAccount"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The server has processed the request."
+                    },
+                    "405": {
+                        "description": "Invalid input."
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "POSTAccount": {
+            "type": "object",
+            "properties": {
+                "batch": {
+                    "type": "string",
+                    "description": "The alias name given to a batch.",
+                    "enum": [
+                        "Batch1",
+                        "Batch2",
+                        "Batch3"
+                    ]
+                },
+                "accountNumber": {
+                    "type": "string",
+                    "description": "A unique account number that does not begin with the default account number prefix.  If no account number is specified, one is generated.",
+                    "maxLength": 50
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The account name that you want to create.",
+                    "maxLength": 255
+                },
+                "currency": {
+                    "type": "string",
+                    "description": "A currency as defined in Z-Billing Settings in the Zuora UI.",
+                    "minLength": 3,
+                    "maxLength": 3
+                },
+                "notes": {
+                    "type": "string",
+                    "description": "A note of the account.",
+                    "maxLength": 65535
+                },
+                "billCycleDay": {
+                    "type": "string",
+                    "description": "The account's bill cycle day (BCD), when bill runs generate invoices for the account.  Specify any day of the month (1-31, where 31 = end-of-month), or 0 for auto-set. Required if no subscription will be created. Optional if a subscription is created and defaults to the day-of-the-month of the subscription's contractEffectiveDate."
+                },
+                "autoPay": {
+                    "type": "boolean",
+                    "description": "Specifies whether future payments are to be automatically billed when they are due."
+                },
+                "crmId": {
+                    "type": "string",
+                    "description": "CRM account ID for the account.",
+                    "maxLength": 100
+                },
+                "invoiceTemplateId": {
+                    "type": "string",
+                    "description": "Invoice template ID, configured in Z-Billing Setting."
+                },
+                "communicationProfileId": {
+                    "type": "string",
+                    "description": "ID of a communication profile."
+                },
+                "paymentGateway": {
+                    "type": "string",
+                    "description": "The name of the payment gateway instance. If null or left unassigned, the Account will use the Default Gateway.",
+                    "maxLength": 40
+                },
+                "paymentTerm": {
+                    "type": "string",
+                    "description": "Payment terms for this account."
+                },
+                "cf_txtn__c": {
+                    "type": "string",
+                    "description": "Account name, up to 255 characters"
+                },
+                "cf_pkn__c": {
+                    "type": "string",
+                    "description": "Account name, up to 255 characters"
+                },
+                "billToContact": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/billToContact"
+                    }
+                },
+                "hpmCreditCardPaymentMethod": {
+                    "type": "string"
+                },
+                "creditCard": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/POSTAccountCreditCard"
+                    }
+                },
+                "subscription": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/POSTAccountSubscription"
+                    }
+                },
+                "taxInfo": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/taxInfo"
+                    }
+                }
+            }
+        },
+        "billToContact": {
+            "type": "object",
+            "properties": {
+                "address1": {
+                    "type": "string",
+                    "description": "First address line.",
+                    "maxLength": 255
+                },
+                "address2": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "city": {
+                    "type": "string",
+                    "maxLength": 40
+                },
+                "country": {
+                    "type": "string",
+                    "maxLength": 64
+                },
+                "county": {
+                    "type": "string",
+                    "maxLength": 32
+                },
+                "fax": {
+                    "type": "string",
+                    "maxLength": 40
+                },
+                "firstName": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "homePhone": {
+                    "type": "string",
+                    "maxLength": 40
+                },
+                "lastName": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "mobilePhone": {
+                    "type": "string",
+                    "maxLength": 40
+                },
+                "nickname": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "otherPhone": {
+                    "type": "string",
+                    "maxLength": 40
+                },
+                "otherPhoneType": {
+                    "type": "string",
+                    "enum": [
+                        "Work",
+                        "Mobile",
+                        "Home",
+                        "Other"
+                    ]
+                },
+                "personalEmail": {
+                    "type": "string"
+                },
+                "zipCode": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "taxRegion": {
+                    "type": "string"
+                },
+                "workEmail": {
+                    "type": "string"
+                },
+                "workPhone": {
+                    "type": "string"
+                },
+                "customFieldsData": {
+                    "type": "string"
+                }
+            }
+        },
+        "POSTAccountCreditCard": {
+            "type": "object",
+            "properties": {
+                "cardType": {
+                    "type": "string"
+                },
+                "cardNumber": {
+                    "type": "string"
+                },
+                "expirationMonth": {
+                    "type": "integer"
+                },
+                "expirationYear": {
+                    "type": "integer"
+                },
+                "securityCode": {
+                    "type": "string"
+                },
+                "cardHolderInfo": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/POSTAccountCardHolderInfo"
+                    }
+                }
+            }
+        },
+        "POSTAccountCardHolderInfo": {
+            "type": "object",
+            "properties": {
+                "address1": {
+                    "type": "string"
+                },
+                "address2": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "zipCode": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                }
+            }
+        },
+        "POSTAccountSubscription": {
+            "type": "object",
+            "properties": {
+                "subscriptionNumber": {
+                    "type": "integer"
+                },
+                "invoiceOwnerAccountKey": {
+                    "type": "string"
+                },
+                "termType": {
+                    "type": "string"
+                },
+                "contractEffectiveDate": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "serviceActivationDate": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "customerActivationDate": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "termStartDate": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "initialTerm": {
+                    "type": "string"
+                },
+                "autoRenew": {
+                    "type": "boolean"
+                },
+                "renewalTerm": {
+                    "type": "integer"
+                },
+                "cf_txtn__c": {
+                    "type": "string"
+                },
+                "cf_pkn__c": {
+                    "type": "string"
+                },
+                "SubscribeToratePlans": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/POSTSrpCreate"
+                    }
+                }
+            }
+        },
+        "POSTSrpCreate": {
+            "type": "object",
+            "properties": {
+                "productRatePlanId": {
+                    "type": "string"
+                },
+                "chargeOverrides": {
+                    "type": "array",
+                    "items": {
+                        "productRatePlanChargeId": {
+                            "type": "string"
+                        },
+                        "quantity": {
+                            "type": "integer"
+                        },
+                        "cf_txtn__c": {
+                            "type": "string"
+                        },
+                        "cf_pkn__c": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "POSTAccountResponse": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "string",
+                    "description": "Contains true if successful, otherwise false."
+                },
+                "processId": {
+                    "type": "string",
+                    "description": "Internal process ID to assist Zuora support. Only returned if success is false."
+                },
+                "reasons": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/reasons"
+                    }
+                },
+                "accountId": {
+                    "type": "string"
+                },
+                "accountNumber": {
+                    "type": "integer"
+                },
+                "paymentMethodId": {
+                    "type": "string"
+                },
+                "subscriptionId": {
+                    "type": "string"
+                },
+                "subscriptionNumber": {
+                    "type": "integer"
+                },
+                "invoiceId": {
+                    "type": "string"
+                },
+                "paymentId": {
+                    "type": "string"
+                },
+                "contractedMrr": {
+                    "type": "integer"
+                },
+                "totalcontractedValue": {
+                    "type": "integer"
+                },
+                "taxInfo": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/TaxExemptInfo"
+                    }
+                }
+            }
+        },
+        "GETAccount": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "string",
+                    "description": "Contains true if successful, otherwise false."
+                },
+                "processId": {
+                    "type": "string",
+                    "description": "Internal process ID to assist Zuora support. Only returned if success is false."
+                },
+                "reasons": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/reasons"
+                    }
+                },
+                "basicInfo": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/basic"
+                    }
+                },
+                "billingAndPayment": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/billingAndPayment"
+                    }
+                },
+                "metrics": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/metrics"
+                    }
+                },
+                "billToContact": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/billToContact"
+                    }
+                },
+                "soldToContact": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/billToContact"
+                    }
+                },
+                "batch": {
+                    "type": "string",
+                    "description": "The alias name given to a batch. A string of 50 characters or less."
+                },
+                "taxinfo": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/taxInfo"
+                    }
+                }
+            }
+        },
+        "TaxExemptInfo": {
+            "type": "object",
+            "properties": {
+                "companyCode": {
+                    "type": "string"
+                },
+                "exemptCertificateId": {
+                    "type": "string"
+                },
+                "exemptCertificateType": {
+                    "type": "string"
+                },
+                "exemptDescription": {
+                    "type": "string"
+                },
+                "exemptEffectiveDate": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "exemptExpirationDate": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "exemptIssuingJurisdiction": {
+                    "type": "string"
+                },
+                "exemptStatus": {
+                    "type": "string"
+                },
+                "VATId": {
+                    "type": "string"
+                }
+            }
+        },
+        "PATCHAccount": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "batch": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "crmId": {
+                    "type": "string"
+                },
+                "autoPay": {
+                    "type": "string"
+                },
+                "invoiceTemplateId": {
+                    "type": "string"
+                },
+                "communicationProfileId": {
+                    "type": "string"
+                },
+                "cf_txtn__c": {
+                    "type": "string"
+                },
+                "cf__pkn__c": {
+                    "type": "string"
+                },
+                "billToContact": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/billToContact"
+                    }
+                },
+                "soldToContact": {
+                    "type": "string"
+                },
+                "paymentGateway": {
+                    "type": "string"
+                },
+                "taxInfo": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/TaxExemptInfo"
+                    }
+                }
+            }
+        },
+        "basic": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "accountNumber": {
+                    "type": "integer"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "crmId": {
+                    "type": "string"
+                },
+                "invoiceTemplateId": {
+                    "type": "string"
+                },
+                "communicationProfileId": {
+                    "type": "string"
+                },
+                "cf_txtn__c": {
+                    "type": "string"
+                }
+            }
+        },
+        "GETAccountSummary": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "string",
+                    "description": "Contains true if successful, otherwise false."
+                },
+                "processId": {
+                    "type": "string",
+                    "description": "Internal process ID to assist Zuora support. Only returned if success is false."
+                },
+                "batch": {
+                    "type": "string"
+                },
+                "reasons": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/reasons"
+                    }
+                },
+                "basicInfo": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/basic"
+                    }
+                },
+                "billToContect": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/billToContact"
+                    }
+                },
+                "soldToContact": {
+                    "type": "string"
+                },
+                "subscriptions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Subscription"
+                    }
+                },
+                "ratePlans": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/RatePlans"
+                    }
+                },
+                "subscriptionStartDate": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "initialTerm": {
+                    "type": "string"
+                },
+                "renewalTerm": {
+                    "type": "string"
+                },
+                "autoRenew": {
+                    "type": "string"
+                },
+                "termStartDate": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "termType": {
+                    "type": "string"
+                },
+                "customFields": {
+                    "type": "string"
+                },
+                "invoices": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Invoices"
+                    }
+                }
+            }
+        },
+        "DefaultPaymentMethod": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "creditCardNumber": {
+                    "type": "integer"
+                },
+                "creditCardExpirationMonth": {
+                    "type": "number"
+                },
+                "creditCardExpirationYear": {
+                    "type": "number"
+                },
+                "creditCardType": {
+                    "type": "string"
+                }
+            }
+        },
+        "Subscription": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "subscriptionNumber": {
+                    "type": "integer"
+                }
+            }
+        },
+        "RatePlans": {
+            "type": "object",
+            "properties": {
+                "productId": {
+                    "type": "string"
+                },
+                "productName": {
+                    "type": "string"
+                },
+                "productRatePlan": {
+                    "type": "number",
+                    "format": "BigDecimal"
+                },
+                "ratePlanName": {
+                    "type": "string"
+                }
+            }
+        },
+        "Invoices": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "invoiceNumber": {
+                    "type": "number"
+                },
+                "invoiceDate": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "dueDate": {
+                    "type": "string",
+                    "format": "date"
+                }
+            }
+        },
+        "billingAndPayment": {
+            "type": "object",
+            "properties": {
+                "billCycleDay": {
+                    "type": "string"
+                },
+                "currency": {
+                    "type": "boolean"
+                },
+                "paymentTerm": {
+                    "type": "string"
+                },
+                "paymentGateway": {
+                    "type": "string"
+                }
+            }
+        },
+        "metrics": {
+            "type": "object",
+            "properties": {
+                "balance": {
+                    "type": "string"
+                },
+                "totalInvoiceBalance": {
+                    "type": "string"
+                },
+                "creditBalance": {
+                    "type": "string"
+                },
+                "contractedMrr": {
+                    "type": "string"
+                }
+            }
+        },
+        "taxInfo": {
+            "type": "object",
+            "properties": {
+                "companyCode": {
+                    "type": "string",
+                    "description": "Unique code that identifies a company account in Avalara"
+                },
+                "exemptCertificateId": {
+                    "type": "string",
+                    "description": "ID of the customer tax exemption certificate"
+                },
+                "exemptCertificateType": {
+                    "type": "string",
+                    "description": "Type of tax exemption certificate that the customer holds."
+                },
+                "exemptDescription": {
+                    "type": "string",
+                    "description": "Description of the tax exemption certificate that the customer holds."
+                },
+                "exemptEffectiveDate": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "exemptExpirationDate": {
+                    "type": "string"
+                },
+                "exemptIssuingJurisdiction": {
+                    "type": "string"
+                },
+                "exemptStatus": {
+                    "type": "string"
+                },
+                "VATId": {
+                    "type": "string"
+                }
+            }
+        },
+        "Error": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "reasons": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "description": "Eight-digit numeric error code"
+                },
+                "message": {
+                    "type": "string",
+                    "description": "Description of the error"
+                }
+            }
+        }
+    }
+}
